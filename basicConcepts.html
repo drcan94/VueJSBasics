@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udemy Rezervasyon Eğitimi</title>
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- parantezler ile kullanım -->
+        {{ newMessage }}
+
+        <p></p>
+
+        <!-- "v-bind:"" ya da sadece ":" kullanarak parantezler olmadan da değişken kullanabiliriz -->
+        <span v-bind:title="newMessage">Merhaba</span>
+
+        <p></p>
+
+        <span :title="secondMessage">Dünya</span>
+
+        <p></p>
+
+        <!-- v-bind yerine url'leri "{{ }}" ile kullanmamalıyız -->
+        <a :href="url">google</a>
+        <p></p>
+        <img :src="imgUrl" alt="">
+
+
+        <!-- v-if kullanımı -->
+        <!-- v-show ile kullanımda kaynakta görünür ama içerik olmaz eğer false ise..  -->
+        <!-- ama v-if de kaynakra div de görülmez -->
+        <div v-if="isUploaded">Görüntü Yüklendi</div>
+        <div v-if="!isUploaded">Görüntü Yüklenmedi</div>
+
+        <!-- v-for kullanımı -->
+        <ol>
+            <li v-for="item in todos">
+                {{ item.text }}
+            </li>
+        </ol>
+
+        <p>Mesaj</p>
+
+        <!-- v-onclick kullanımı -->
+        <!-- Fonksiyonları data dışında "methods" diye bir obje içinde belirtiyoruz en aşağıdaki scriptte -->
+        {{clickMessage}}
+        <p></p>
+        <button v-on:click="changeText">Yazıyı değiştir</button>
+        <button @click="returnBack">Eski Haline getir</button>
+        <!-- iki kullanım da olur -->
+
+        <p></p>
+
+        <!-- v-model kullanımı -->
+
+        <p v-if="fullName">Girdiğiniz isim => {{fullName}}</p>
+        <input type="text" v-model="fullName" placeholder="Tam adınızı giriniz">
+
+        <p></p>
+
+        <button @click="defineName">İsmi ben vereyim</button>
+
+        <p></p>
+
+        <!-- Component mimarisi -->
+
+        <first-component :data="fullName"></first-component>
+        <first-component :data="anotherName"></first-component>
+
+        <p></p>
+
+        <ol>
+            <contacts-component v-for="person in contacts" :data="person" :key="person.id"></contacts-component>
+        </ol>
+
+        <p></p>
+
+        <!-- Life-Cycle -> created, computed, mounted methods and watch-->
+
+
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script type="text/javascript">
+
+        Vue.component(
+            "first-component",
+            {
+                props: ["data"],
+                template: "<li>Burası Muştur<span v-if='data'> ve benim adımdır '{{ data }}'</span></li>"
+            }
+        );
+
+        Vue.component(
+            "contacts-component",
+            {
+                props: ["data"],
+                template: "<li>{{data.name}} => id: {{data.id}}</li>"
+            }
+        );
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                newMessage: 'Merhaba',
+                secondMessage: "Naber",
+                url: "http://google.com",
+                imgUrl: "https://i.ytimg.com/vi/9WM7CKNx8uI/hqdefault.jpg",
+                isUploaded: false,
+                todos: [
+                    { text: 'Learn JavaScript' },
+                    { text: 'Learn Vue' },
+                    { text: 'Build something awesome' }
+                ],
+                clickMessage: "Naber Mesajcı",
+                fullName: "",
+                anotherName: "Godfather",
+                contacts: [
+                    { id: 0, name: "Burak CAN" },
+                    { id: 1, name: "Zehra CAN" },
+                    { id: 2, name: "Ömür CAN" },
+                ]
+
+            },
+            created() {
+                // Vue componenti ilk çağrıldığında çalışan metod
+                console.log("1")
+            },
+            computed() {
+                // render işlemi bittikten sonra çalışır
+                console.log("2")
+            },
+            mounted() {
+                // render olma anı ile beraber componentin var olduğu tüm süreyi içerir
+                console.log("3")
+            },
+            watch: {
+                // değişikliği yakalar
+                fullName(){
+                    // fullName değişkeni değiştikçe burası çalışır
+                    console.log("fullName değişti")
+                },
+                clickMessage() {
+                    console.log("clickMessage değişti")
+                }
+            },
+            methods: {
+                changeText: function () {
+                    this.clickMessage = "Bana bastın"
+                },
+                returnBack: function () {
+                    this.clickMessage = "Naber Mesajcı"
+                },
+                defineName: function () {
+                    this.fullName = "Abuzittin :)"
+                }
+            },
+
+        });
+
+    </script>
+</body>
+
+</html>
